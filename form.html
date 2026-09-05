@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>boyroom ‧ order form</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=JetBrains+Mono:wght@400;500;600&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF7ED;
+    --ink:#18181B;
+    --stone:#5C5654;
+    --pink:#FF3D9A;
+    --violet:#A78BFA;
+    --blue:#2B52FF;
+    --lime:#C6FF3D;
+    --orange:#FF5500;
+    --accent:#2B52FF;
+    --powder:#EBF1FF;
+    --powder-deep:#2B52FF;
+    --paper:#FFFFFF;
+    --line: rgba(24,24,27,0.14);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(43,82,255,0.14), transparent 40%),
+      radial-gradient(circle at 90% 15%, rgba(198,255,61,0.20), transparent 45%),
+      var(--cream);
+    color:var(--ink);
+    font-family:'Karla', sans-serif;
+    line-height:1.5;
+    padding-bottom:80px;
+  }
+  a{color:inherit;}
+
+  .ticket{max-width:680px; margin:36px auto 8px; padding:0 20px;}
+  .ticket-inner{
+    background:var(--paper);
+    border-radius:var(--radius);
+    box-shadow:0 1px 2px rgba(24,24,27,0.06), 0 10px 30px rgba(24,24,27,0.08);
+    padding:34px 30px 26px;
+    position:relative; overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .ticket-inner::before{
+    content:""; position:absolute; inset:0;
+    background:repeating-linear-gradient(90deg, transparent 0 6px, rgba(24,24,27,0.05) 6px 7px);
+    opacity:.5; pointer-events:none;
+  }
+  .stub-row{display:flex; justify-content:space-between; align-items:flex-start; gap:16px;}
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--accent); margin:0 0 6px;
+  }
+  h1.title{font-family:'Fraunces', serif; font-weight:500; font-size:32px; margin:0; letter-spacing:-0.01em;}
+  h1.title em{font-style:italic; color:var(--accent); font-weight:500;}
+  .demo-link{font-size:12.5px; color:var(--stone); margin-top:4px; font-family:'JetBrains Mono', monospace;}
+  .demo-link a{color:var(--accent); text-decoration:underline; font-weight:600;}
+  .price-tag{text-align:right; font-family:'JetBrains Mono', monospace; flex-shrink:0;}
+  .price-tag .label{font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--stone);}
+  .price-tag .amount{font-size:22px; font-weight:600; color:var(--ink);}
+  .perforation{height:0; border-top:2px dashed rgba(24,24,27,0.2); margin:24px -30px 0; position:relative;}
+  .perforation::before,.perforation::after{content:""; position:absolute; top:-9px; width:18px; height:18px; border-radius:50%; background:var(--cream);}
+  .perforation::before{left:-9px;} .perforation::after{right:-9px;}
+
+  .wrap{max-width:680px; margin:0 auto; padding:0 20px;}
+  .exhibit{background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); margin-top:18px; overflow:hidden;}
+  .exhibit-head{
+    display:flex; align-items:baseline; gap:12px; padding:18px 24px 14px;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg, rgba(43,82,255,0.08), transparent);
+  }
+  .exhibit-num{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--accent);
+    background:rgba(43,82,255,0.12); padding:3px 8px; border-radius:20px; letter-spacing:.05em; font-weight:600;
+  }
+  .exhibit-title{font-family:'Fraunces', serif; font-size:19px; font-weight:500; margin:0;}
+  .exhibit-note{font-size:12px; color:var(--stone); margin:2px 0 0 auto; text-align:right; font-style:italic;}
+  .exhibit-body{padding:20px 24px 24px; display:grid; gap:16px;}
+
+  .field{display:grid; gap:6px;}
+  .field label{font-family:'JetBrains Mono', monospace; font-size:11.5px; letter-spacing:.04em; color:var(--stone);}
+  .field label .req{color:var(--accent); font-weight:700;}
+  .field input[type=text], .field input[type=date], .field textarea, .field select{
+    font-family:'Karla', sans-serif; font-size:14px; padding:10px 12px; border-radius:9px;
+    border:1px solid var(--line); background:var(--cream); color:var(--ink); width:100%; resize:vertical;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{outline:2px solid var(--powder-deep); outline-offset:1px; background:var(--paper);}
+  .field textarea{min-height:50px;}
+  .field .default-hint{font-size:11px; color:var(--stone); opacity:.85; font-family:'JetBrains Mono', monospace; line-height:1.4;}
+  .field input.invalid, .field textarea.invalid, .link-suffix.invalid{
+    border-color:var(--pink) !important; background:#FFE7F3 !important;
+  }
+
+  .sub-heading{
+    font-family:'Fraunces', serif; font-size:15px; font-weight:600; color:var(--ink);
+    padding-bottom:4px; border-bottom:1px dashed var(--line); margin-top:8px; margin-bottom:2px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .sub-heading span{font-family:'JetBrains Mono', monospace; font-size:10.5px; font-weight:400; color:var(--stone);}
+
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .row3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;}
+  @media(max-width:580px){.row2, .row3{grid-template-columns:1fr;}}
+
+  .radio-group{display:flex; gap:10px;}
+  .radio-pill{
+    flex:1; text-align:center; padding:9px 10px; border-radius:9px; border:1px solid var(--line);
+    cursor:pointer; font-size:13px; background:var(--cream); transition:background .15s, border-color .15s;
+    font-family:'JetBrains Mono', monospace;
+  }
+  .radio-pill input{display:none;}
+  .radio-pill.active{background:rgba(43,82,255,0.18); border-color:var(--accent); font-weight:700; color:var(--accent);}
+
+  .swatches{display:flex; gap:8px; flex-wrap:wrap;}
+  .swatch{
+    display:flex; align-items:center; gap:6px; font-family:'JetBrains Mono', monospace; font-size:11px;
+    background:var(--cream); border:1px solid var(--line); padding:5px 9px 5px 5px; border-radius:20px;
+  }
+  .swatch i{width:16px; height:16px; border-radius:50%; display:inline-block; border:1px solid rgba(0,0,0,0.1);}
+  .palette-inputs{display:none; flex-direction:column; gap:8px;}
+  .palette-inputs.show{display:flex;}
+  .palette-row{display:flex; align-items:center; gap:8px;}
+  .palette-inputs input[type=color]{width:38px; height:38px; padding:0; border:1px solid var(--line); border-radius:9px; background:none; cursor:pointer; flex-shrink:0;}
+  .palette-inputs input[type=text]{
+    font-family:'JetBrains Mono', monospace; font-size:13px; padding:9px 10px; border-radius:9px;
+    border:1px solid var(--line); background:var(--cream); color:var(--ink); width:110px; text-transform:uppercase;
+  }
+  .palette-inputs input[type=text].invalid{border-color:var(--pink) !important; background:#FFE7F3 !important;}
+
+  .checkbox-line{display:flex; align-items:center; gap:9px; font-size:13.5px; background:var(--powder); padding:10px 12px; border-radius:9px; color:#1E1147;}
+  .checkbox-line input{width:16px; height:16px; accent-color:var(--accent);}
+
+  .note-block{border:1px dashed var(--powder-deep); border-radius:9px; padding:12px 14px; background:var(--powder); font-size:12.5px; color:#172554; line-height:1.5;}
+  .note-block strong{color:var(--accent);}
+
+  .link-suffix{display:flex; align-items:center; border:1px solid var(--line); border-radius:9px; overflow:hidden; background:var(--cream);}
+  .link-suffix input{border:none; background:transparent; flex:1; padding:10px 12px; font-size:14px; font-family:'Karla',sans-serif;}
+  .link-suffix span{padding:0 12px; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--stone); border-left:1px solid var(--line); align-self:stretch; display:flex; align-items:center; background:var(--powder);}
+
+  .generate-block{margin-top:24px; text-align:center;}
+  .btn{
+    font-family:'JetBrains Mono', monospace; font-size:13px; letter-spacing:.04em; padding:14px 28px;
+    border-radius:30px; border:1px solid var(--ink); background:var(--ink); color:var(--cream); cursor:pointer;
+    transition:transform .15s, opacity .15s, background .15s; font-weight:600;
+  }
+  .btn:hover{transform:translateY(-1px); background:#2B52FF; border-color:#2B52FF;}
+  .btn:active{transform:translateY(0);}
+  .btn.secondary{background:transparent; color:var(--ink); border-color:var(--stone);}
+  .btn.secondary:hover{background:var(--powder); border-color:var(--accent); color:var(--accent);}
+
+  .output-card{display:none; margin-top:20px; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:22px;}
+  .output-card.show{display:block;}
+  .output-card h3{font-family:'Fraunces', serif; font-weight:500; font-size:18px; margin:0 0 10px;}
+  .output-card pre{
+    white-space:pre-wrap; word-break:break-word; font-family:'JetBrains Mono', monospace; font-size:12px;
+    line-height:1.65; background:var(--cream); border:1px solid var(--line); border-radius:9px; padding:16px;
+    max-height:360px; overflow-y:auto; text-align:left;
+  }
+  .output-actions{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;}
+  .output-actions .btn{flex:1; min-width:150px;}
+  .copied-msg{font-size:12.5px; color:var(--accent); margin-top:10px; display:none; font-weight:700;}
+
+  footer.paw{text-align:center; font-size:12px; color:var(--stone); margin-top:40px; font-family:'JetBrains Mono', monospace; letter-spacing:.06em;}
+</style>
+</head>
+<body>
+
+<div class="ticket">
+  <div class="ticket-inner">
+    <div class="stub-row">
+      <div>
+        <p class="eyebrow">not a one-time sale ‧ ready-made website</p>
+        <h1 class="title">boyroom <em>form</em> ♡</h1>
+      </div>
+      <div class="price-tag">
+        <div class="label">total</div>
+        <div class="amount" id="priceOut">Rp25.000</div>
+      </div>
+    </div>
+    <div class="perforation"></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section class="exhibit" id="tncCard">
+    <div class="exhibit-head">
+      <span class="exhibit-num">t&c</span>
+      <h2 class="exhibit-title">terms & condition</h2>
+    </div>
+    <div class="exhibit-body" style="gap:12px;">
+      <p style="font-size:13.5px; line-height:1.7; margin:0;"><strong>(a.)</strong> please read all terms and conditions carefully before placing an order.</p>
+      <p style="font-size:13.5px; line-height:1.7; margin:0;"><strong>(b.)</strong> ready-made websites allow buyers to change names, colors, texts, music, and photos. buyers may also request simple decorations for an additional fee of idr 3,000. changing the color palette will cost an additional idr 2,000. buyers may also use wording provided by the seller (default text), which will not incur any additional fee. each ready-made website design may be sold to and used by more than one buyer, meaning the purchase is not exclusive.</p>
+      <p style="font-size:13.5px; line-height:1.7; margin:0;"><strong>(c.)</strong> simple revisions are allowed up to 3 times. revisions required due to seller's mistakes are free of charge. revisions exceeding 3 times or major layout changes may be subject to an additional fee.</p>
+      <p style="font-size:13.5px; line-height:1.7; margin:0;"><strong>(d.)</strong> full payment must be made before the website is processed. payment is accepted only through qris, with no additional payment fee.</p>
+      <p style="font-size:13.5px; line-height:1.7; margin:0;"><strong>(e.)</strong> website processing usually takes 1–7 days after payment has been made, depending on the queue. if you need the website to be completed within 24 hours before your deadline, an additional idr 4,000 rush fee will apply.</p>
+      <p style="font-size:13.5px; line-height:1.7; margin:0;"><strong>(f.)</strong> no refunds or cancellations are accepted after the website has been sent.</p>
+      <p style="font-size:13.5px; line-height:1.7; margin:0;"><strong>(g.)</strong> all designs, codes, and contents belong to @liltz. copying, reselling, redistributing, or claiming them as your own is strictly prohibited. by ordering through @liltz, buyers agree to all terms above.</p>
+    </div>
+  </section>
+</div>
+
+<div class="wrap" id="formRoot"></div>
+
+<div class="wrap generate-block">
+  <button class="btn" id="generateBtn">submit</button>
+  <p style="font-size:12px; color:var(--stone); margin-top:10px; font-family:'JetBrains Mono', monospace;">
+    tekan submit → teks pesanan otomatis tersalin ke clipboard & chat <a href="https://t.me/mirssy" target="_blank" rel="noopener" style="color:var(--accent); font-weight:600;">t.me/mirssy</a> terbuka otomatis. tinggal paste lalu kirimkan 10 foto (4 digicam, 2 polaroid, 4 timeline) & 3 file lagu (.mp3) langsung di sana.
+  </p>
+  <p id="formError" style="display:none; font-size:13px; color:var(--pink); font-weight:700; margin-top:10px;"></p>
+  <div class="output-card" id="outputCard">
+    <h3>form pesanan kamu</h3>
+    <pre id="outputText"></pre>
+    <div class="output-actions">
+      <button class="btn secondary" id="copyBtn">salin teks lagi</button>
+      <a class="btn" href="https://t.me/mirssy" target="_blank" rel="noopener">buka t.me/mirssy</a>
+    </div>
+    <p id="sendStatus" style="font-size:12px; color:var(--stone); margin:10px 0 0;"></p>
+    <p class="copied-msg" id="copiedMsg"></p>
+  </div>
+</div>
+
+<footer class="paw">𓏲 ‧ thank you for stopping by ‧ 𓏲</footer>
+
+<script>
+const DEFAULT_PALETTE = ['#2B52FF','#C6FF3D','#FF5500','#FF3366','#141620','#FFF7ED'];
+
+const root = document.getElementById('formRoot');
+function el(html){ const d=document.createElement('div'); d.innerHTML=html.trim(); return d.firstElementChild; }
+
+function fieldRow(f){
+  const reqMark = f.req ? ' <span class="req">*</span>' : '';
+  const reqAttr = f.req ? '' : ' data-required="false"';
+  if(f.long){
+    return `
+    <div class="field">
+      <label for="${f.key}">${f.label}${reqMark}</label>
+      <textarea id="${f.key}" data-key="${f.key}" placeholder="${f.def.replace(/"/g,'&quot;')}"${reqAttr}></textarea>
+      <span class="default-hint">default: ${f.def}</span>
+    </div>`;
+  }
+  return `
+  <div class="field">
+    <label for="${f.key}">${f.label}${reqMark}</label>
+    <input type="text" id="${f.key}" data-key="${f.key}" placeholder="${f.def.replace(/"/g,'&quot;')}"${reqAttr}>
+    <span class="default-hint">default: ${f.def}</span>
+  </div>`;
+}
+
+// ---------- 00 customer identity ----------
+root.appendChild(el(`
+<section class="exhibit">
+  <div class="exhibit-head">
+    <span class="exhibit-num">00</span>
+    <h2 class="exhibit-title">customer identity</h2>
+  </div>
+  <div class="exhibit-body">
+    <div class="row2">
+      <div class="field"><label>name <span class="req">*</span></label><input type="text" id="cust_name" data-key="cust_name" placeholder="nama kamu"></div>
+      <div class="field"><label>username (telegram / ig) <span class="req">*</span></label><input type="text" id="cust_username" data-key="cust_username" placeholder="@username"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>payment</label><input type="text" value="qris no rate" disabled></div>
+      <div class="field"><label>deadline <span class="req">*</span></label><input type="date" id="deadline" data-key="deadline"></div>
+    </div>
+    <label class="checkbox-line">
+      <input type="checkbox" id="rush">
+      need it done within 24 hours before deadline (+4.000 rush fee — poin (e) t&c)
+    </label>
+  </div>
+</section>`));
+
+// ---------- 01 custom color palette ----------
+const paletteRowsHtml = DEFAULT_PALETTE.map((hex,i)=>`
+  <div class="palette-row">
+    <input type="color" value="${hex}" data-idx="${i}" data-pair="hex${i}">
+    <input type="text" id="hex${i}" value="${hex}" maxlength="7" placeholder="${hex}">
+  </div>`).join('');
+
+root.appendChild(el(`
+<section class="exhibit">
+  <div class="exhibit-head">
+    <span class="exhibit-num">01</span>
+    <h2 class="exhibit-title">custom color palette</h2>
+    <p class="exhibit-note">recolor +2.000</p>
+  </div>
+  <div class="exhibit-body">
+    <div class="field">
+      <label>recolor</label>
+      <div class="radio-group">
+        <label class="radio-pill" id="pillNo"><input type="radio" name="recolor" value="no" checked>no</label>
+        <label class="radio-pill" id="pillYes"><input type="radio" name="recolor" value="yes">yes</label>
+      </div>
+    </div>
+    <div class="field">
+      <label>default palette</label>
+      <div class="swatches" id="defaultSwatches"></div>
+    </div>
+    <div class="field">
+      <label>new palette</label>
+      <div class="palette-inputs" id="paletteInputs">${paletteRowsHtml}</div>
+    </div>
+  </div>
+</section>`));
+
+const swatchWrap = document.getElementById('defaultSwatches');
+DEFAULT_PALETTE.forEach(hex=>{
+  swatchWrap.appendChild(el(`<span class="swatch"><i style="background:${hex}"></i>${hex}</span>`));
+});
+document.querySelectorAll('input[name=recolor]').forEach(r=>{
+  r.addEventListener('change', ()=>{
+    document.getElementById('pillYes').classList.toggle('active', r.value==='yes' && r.checked);
+    document.getElementById('pillNo').classList.toggle('active', r.value==='no' && r.checked);
+    document.getElementById('paletteInputs').classList.toggle('show', document.querySelector('input[name=recolor]:checked').value==='yes');
+    updatePrice();
+  });
+});
+document.getElementById('pillNo').classList.add('active');
+
+document.querySelectorAll('#paletteInputs input[type=color]').forEach(colorInput=>{
+  const hexInput = document.getElementById(colorInput.dataset.pair);
+  colorInput.addEventListener('input', ()=>{
+    hexInput.value = colorInput.value.toUpperCase();
+    hexInput.classList.remove('invalid');
+  });
+});
+document.querySelectorAll('#paletteInputs input[type=text]').forEach(hexInput=>{
+  hexInput.addEventListener('input', ()=>{
+    let v = hexInput.value.trim();
+    if(v && !v.startsWith('#')) v = '#' + v;
+    hexInput.value = v.toUpperCase();
+    const valid = /^#[0-9A-F]{6}$/.test(hexInput.value);
+    hexInput.classList.toggle('invalid', !valid && hexInput.value !== '');
+    if(valid){
+      const colorInput = document.querySelector(`#paletteInputs input[type=color][data-pair="${hexInput.id}"]`);
+      colorInput.value = hexInput.value;
+    }
+  });
+});
+
+// ---------- 02 birthday & identity record ----------
+root.appendChild(el(`
+<section class="exhibit">
+  <div class="exhibit-head">
+    <span class="exhibit-num">02</span>
+    <h2 class="exhibit-title">birthday & identity record</h2>
+  </div>
+  <div class="exhibit-body">
+    ${[
+      {key:'bf_name', label:'boyfriend nickname', def:'Jose'},
+      {key:'gf_name', label:'girlfriend nickname (your name)', def:'Esme'},
+      {key:'birth_date', label:'birth date (e.g. January 3, 2009)', def:'January 3, 2009'},
+      {key:'age', label:'turning age (e.g. 17)', def:'17'},
+      {key:'year_celebration', label:'celebration year (e.g. 2026)', def:'2026'},
+      {key:'relationship_year', label:'relationship start year / first meet (e.g. 2024)', def:'2024'},
+    ].map(fieldRow).join('')}
+  </div>
+</section>`));
+
+// ---------- 03 door entrance sticky note ----------
+root.appendChild(el(`
+<section class="exhibit">
+  <div class="exhibit-head">
+    <span class="exhibit-num">03</span>
+    <h2 class="exhibit-title">sticky note pintu masuk 3D</h2>
+  </div>
+  <div class="exhibit-body">
+    <div class="note-block">📌 pesan memo kecil yang tertempel di daun pintu 3D sebelum masuk kamar.</div>
+    ${[
+      {key:'door_msg', label:'door sticky note message', def:'Happy 17th Birthday, Jose. I built this virtual mini room holding all my love for you, tap the door handle to enter.', long:true},
+      {key:'door_sign', label:'door sign off (nama kamu)', def:'By, Esme.'},
+    ].map(fieldRow).join('')}
+  </div>
+</section>`));
+
+// ---------- 04 laptop computer os (all folders) ----------
+root.appendChild(el(`
+<section class="exhibit">
+  <div class="exhibit-head">
+    <span class="exhibit-num">04</span>
+    <h2 class="exhibit-title">laptop workstation (computer os)</h2>
+  </div>
+  <div class="exhibit-body">
+    <div class="note-block">💻 saat laptop di meja diklik, akan terbuka os interaktif dengan 4 folder: <strong>about profile</strong>, <strong>our archive</strong>, <strong>sweet 17 pass</strong>, dan <strong>love notes</strong>.</div>
+
+    <div class="sub-heading">folder 01 : about profile <span>profil cowok</span></div>
+    ${[
+      {key:'pc_feature', label:'my favorite feature about you', def:'The gentle warmth in your eyes whenever you look at me', long:true},
+      {key:'pc_superpower', label:'your secret superpower', def:'Making all my heaviest days feel light just by holding my hand', long:true},
+      {key:'pc_habit', label:'favorite shared habit', def:'Listening to our playlist under the late night sky with nowhere else to be', long:true},
+    ].map(fieldRow).join('')}
+
+    <div class="sub-heading" style="margin-top:14px;">folder 02 : our archive <span>angka & riwayat hubungan</span></div>
+    <div class="row2">
+      ${[
+        {key:'stat_days', label:'stat: days together (e.g. 730+)', def:'730+'},
+        {key:'stat_days_label', label:'stat label', def:'Days I have fallen deeper in love with you'},
+      ].map(fieldRow).join('')}
+    </div>
+    ${[
+      {key:'log1', label:'log 01 : judul / cerita singkat', def:'The First Glance / The moment my world quietly shifted and chose you.', long:true},
+      {key:'log2', label:'log 02 : judul / cerita singkat', def:'Late Night Calls / Whispering about our dreams until the city fell asleep.', long:true},
+      {key:'log3', label:'log 03 : judul / cerita singkat', def:'Every Quiet Walk / Realizing home is not a place, but anywhere I walk beside you.', long:true},
+      {key:'log4', label:'log 04 : judul / cerita singkat', def:'Today at 17 / Promising to love you through every season still to come.', long:true},
+    ].map(fieldRow).join('')}
+
+    <div class="sub-heading" style="margin-top:14px;">folder 03 : sweet 17 pass <span>kartu akses VIP / id card pacar</span></div>
+    <div class="row2">
+      ${[
+        {key:'card_id', label:'pass id number (e.g. 2009-0103-LOVE-17)', def:'2009-0103-LOVE-17'},
+        {key:'card_status', label:'card status', def:'Permanently Cherished & Adored'},
+      ].map(fieldRow).join('')}
+    </div>
+    ${[
+      {key:'card_perk1', label:'perk 01 (hak istimewa 1)', def:'Unlimited warm embraces whenever the world feels overwhelming', long:true},
+      {key:'card_perk2', label:'perk 02 (hak istimewa 2)', def:'Lifelong priority access to all my softest thoughts and warmest kisses', long:true},
+      {key:'card_perk3', label:'perk 03 (hak istimewa 3)', def:'A constant hand to hold through every adventure, milestone, and quiet moment', long:true},
+      {key:'card_perk4', label:'perk 04 (hak istimewa 4)', def:'An eternal cheerleader who believes in your brightest future without question', long:true},
+    ].map(fieldRow).join('')}
+
+    <div class="sub-heading" style="margin-top:14px;">folder 04 : love notes <span>4 pesan romantis tanpa tanda petik</span></div>
+    ${[
+      {key:'note1', label:'love note 01', def:'You are the quiet peace in my noisy world, the gentle anchor I never knew I needed.', long:true},
+      {key:'note2', label:'love note 02', def:'I love who you are today, who you were yesterday, and every version of you yet to unfold.', long:true},
+      {key:'note3', label:'love note 03', def:'If I had to live this life a thousand times over, I would search for you in every single one.', long:true},
+      {key:'note4', label:'love note 04', def:'Happy 17th Birthday, my love. Being yours is the greatest gift I have ever known.', long:true},
+    ].map(fieldRow).join('')}
+  </div>
+</section>`));
+
+// ---------- 05 cake ceremony ----------
+root.appendChild(el(`
+<section class="exhibit">
+  <div class="exhibit-head">
+    <span class="exhibit-num">05</span>
+    <h2 class="exhibit-title">kue ulang tahun & tiup lilin (cake ceremony)</h2>
+  </div>
+  <div class="exhibit-body">
+    <div class="note-block">🎂 saat kue di atas meja diklik, akan muncul pop-up tiup lilin interaktif.</div>
+    ${[
+      {key:'cake_tag', label:'tag usia atas (e.g. 17)', def:'17'},
+      {key:'cake_title', label:'judul kue (e.g. Sweet 17 Birthday Wish)', def:'Sweet 17 Birthday Wish'},
+      {key:'cake_sub', label:'pesan ajakan tiup lilin', def:'Close your eyes, make the deepest wish in your heart, and blow out the candle.', long:true},
+      {key:'cake_wish', label:'teks tombol setelah lilin ditiup', def:'Make a Wish & Blow the Candle'},
+    ].map(fieldRow).join('')}
+  </div>
+</section>`));
+
+// ---------- 06 imessage simulation ----------
+root.appendChild(el(`
+<section class="exhibit">
+  <div class="exhibit-head">
+    <span class="exhibit-num">06</span>
+    <h2 class="exhibit-title">chat simulasi iPhone 16 (iMessage)</h2>
+  </div>
+  <div class="exhibit-body">
+    <div class="note-block">📱 obrolan chat romantis yang muncul saat iPhone di atas meja nakas diklik.</div>
+    <div class="sub-heading">balon pesan chat <span>4 obrolan utama</span></div>
+    ${[
+      {key:'msg1', label:'chat message 01 (12:00 AM)', def:'Happy 17th Birthday, my handsome boy.'},
+      {key:'msg2', label:'chat message 02 (12:01 AM)', def:'I made this entire digital room just for you so you can feel how much you mean to me.'},
+      {key:'msg3', label:'chat message 03 (12:02 AM)', def:'Every song, every note, every corner here holds a piece of my heart for you.'},
+      {key:'msg4', label:'chat message 04 (Just now)', def:'Are you exploring your room right now?'},
+    ].map(fieldRow).join('')}
+
+    <div class="sub-heading" style="margin-top:14px;">quick replies <span>tombol balasan interaktif pembeli / balasan otomatis</span></div>
+    ${[
+      {key:'qr1', label:'quick reply 01 → teks tombol / balasan otomatis', def:'I love you so much, Esme. / I love you more than words could ever say, Jose.', long:true},
+      {key:'qr2', label:'quick reply 02 → teks tombol / balasan otomatis', def:'This is the most beautiful gift ever. / You deserve all the tenderness and beauty in this world.', long:true},
+      {key:'qr3', label:'quick reply 03 → teks tombol / balasan otomatis', def:'Come here and give me a hug. / On my way to wrap my arms around you forever.', long:true},
+    ].map(fieldRow).join('')}
+  </div>
+</section>`));
+
+// ---------- 07 camera digicam ----------
+root.appendChild(el(`
+<section class="exhibit">
+  <div class="exhibit-head">
+    <span class="exhibit-num">07</span>
+    <h2 class="exhibit-title">kamera digicam (4 foto)</h2>
+  </div>
+  <div class="exhibit-body">
+    <div class="note-block">📷 kirim <strong>4 file foto</strong> kamera digicam di telegram nanti.</div>
+    ${[
+      {key:'cam1_cap', label:'photo 01 caption', def:'The way you smile when you don\'t even realize I\'m looking at you.'},
+      {key:'cam1_loc', label:'photo 01 tag / location / year (e.g. My Favorite Candid)', def:'My Favorite Candid'},
+      {key:'cam2_cap', label:'photo 02 caption', def:'My favorite view across every table, in every place we go.'},
+      {key:'cam2_loc', label:'photo 02 tag / location / year (e.g. Everyday Dates)', def:'Everyday Dates'},
+      {key:'cam3_cap', label:'photo 03 caption', def:'Lost in your thoughts, looking effortlessly handsome as always.'},
+      {key:'cam3_loc', label:'photo 03 tag / location / year (e.g. Quiet Moments)', def:'Quiet Moments'},
+      {key:'cam4_cap', label:'photo 04 caption', def:'The boy who stole my entire heart, celebrating 17 today.'},
+      {key:'cam4_loc', label:'photo 04 tag / location / year (e.g. Sweet 17)', def:'Sweet 17'},
+    ].map(fieldRow).join('')}
+  </div>
+</section>`));
+
+// ---------- 08 wall polaroids (2 photos) ----------
+root.appendChild(el(`
+<section class="exhibit">
+  <div class="exhibit-head">
+    <span class="exhibit-num">08</span>
+    <h2 class="exhibit-title">polaroid dinding (2 foto bolak-balik)</h2>
+  </div>
+  <div class="exhibit-body">
+    <div class="note-block">🖼️ kirim <strong>2 file foto polaroid</strong> di telegram. foto bisa di-flip/dibalik untuk membaca tulisan tangan kamu di baliknya!</div>
+    ${[
+      {key:'pol1_front', label:'polaroid 01 front caption (tulisan depan)', def:'My favorite boy in the world.'},
+      {key:'pol1_back', label:'polaroid 01 handwritten back note (pesan belakang)', def:'I love capturing candid moments of you because seeing you happy is my favorite thing on earth. Happy 17th, Jose.', long:true},
+      {key:'pol2_front', label:'polaroid 02 front caption (tulisan depan)', def:'My heart found its home in you.'},
+      {key:'pol2_back', label:'polaroid 02 handwritten back note (pesan belakang)', def:'Thank you for being the most loving, handsome, and gentle boyfriend a girl could ever dream of.', long:true},
+    ].map(fieldRow).join('')}
+  </div>
+</section>`));
+
+// ---------- 09 timeline the road to (4 photos) ----------
+root.appendChild(el(`
+<section class="exhibit">
+  <div class="exhibit-head">
+    <span class="exhibit-num">09</span>
+    <h2 class="exhibit-title">timeline perjalanan (the road to 17 / 4 foto)</h2>
+  </div>
+  <div class="exhibit-body">
+    <div class="note-block">🗓️ kirim <strong>4 file foto milestone</strong> di telegram untuk 4 babak perjalanan kisah cinta kalian.</div>
+    
+    <div class="sub-heading">milestone 01 : kelahiran / awal mula</div>
+    <div class="row2">
+      ${[
+        {key:'t1_date', label:'tanggal / tahun', def:'January 3'},
+        {key:'t1_tag', label:'tag badge', def:'The Beginning'},
+      ].map(fieldRow).join('')}
+    </div>
+    ${[
+      {key:'t1_title', label:'judul milestone', def:'The World Received You'},
+      {key:'t1_prev', label:'cuplikan singkat (preview)', def:'The day the boy who would one day hold my entire world was born.'},
+      {key:'t1_story', label:'cerita lengkap (full memory)', def:'On January 3, 2009, you entered this world. Even before our paths ever crossed, the universe was already shaping the sweetest soul I would ever know.', long:true},
+    ].map(fieldRow).join('')}
+
+    <div class="sub-heading" style="margin-top:14px;">milestone 02 : awal kenal / terhubung</div>
+    <div class="row2">
+      ${[
+        {key:'t2_date', label:'tanggal / tahun', def:'First Hello'},
+        {key:'t2_tag', label:'tag badge', def:'The Spark'},
+      ].map(fieldRow).join('')}
+    </div>
+    ${[
+      {key:'t2_title', label:'judul milestone', def:'When Our Worlds Collided'},
+      {key:'t2_prev', label:'cuplikan singkat (preview)', def:'A simple introduction that turned into the most meaningful connection of my life.'},
+      {key:'t2_story', label:'cerita lengkap (full memory)', def:'I remember looking at you for the first time, feeling that sudden flutter in my chest, and knowing you were someone truly special.', long:true},
+    ].map(fieldRow).join('')}
+
+    <div class="sub-heading" style="margin-top:14px;">milestone 03 : semakin dekat / jadian</div>
+    <div class="row2">
+      ${[
+        {key:'t3_date', label:'tanggal / tahun', def:'Every Sunset'},
+        {key:'t3_tag', label:'tag badge', def:'Growing Closer'},
+      ].map(fieldRow).join('')}
+    </div>
+    ${[
+      {key:'t3_title', label:'judul milestone', def:'Falling in Love with You Everyday'},
+      {key:'t3_prev', label:'cuplikan singkat (preview)', def:'Shared laughter, whispered secrets, and learning every nuance of your heart.'},
+      {key:'t3_story', label:'cerita lengkap (full memory)', def:'Through every quiet evening and every smile you gave me, I fell completely in love with your kindness, your warmth, and the boy you are.', long:true},
+    ].map(fieldRow).join('')}
+
+    <div class="sub-heading" style="margin-top:14px;">milestone 04 : perayaan ulang tahun / hari ini</div>
+    <div class="row2">
+      ${[
+        {key:'t4_date', label:'tanggal / tahun', def:'January 3'},
+        {key:'t4_tag', label:'tag badge', def:'Sweet 17'},
+      ].map(fieldRow).join('')}
+    </div>
+    ${[
+      {key:'t4_title', label:'judul milestone', def:'Seventeen and Deeply Loved'},
+      {key:'t4_prev', label:'cuplikan singkat (preview)', def:'Celebrating 17 years of your existence, with a promise of endless love ahead.'},
+      {key:'t4_story', label:'cerita lengkap (full memory)', def:'Today you turn 17. Looking at you now, I see the handsome boy of my dreams, and I promise to love you through every chapter still to come.', long:true},
+    ].map(fieldRow).join('')}
+  </div>
+</section>`));
+
+// ---------- 10 bed love letter ----------
+root.appendChild(el(`
+<section class="exhibit">
+  <div class="exhibit-head">
+    <span class="exhibit-num">10</span>
+    <h2 class="exhibit-title">surat cinta kasur (bed letter)</h2>
+  </div>
+  <div class="exhibit-body">
+    <div class="note-block">🛏️ surat cinta panjang dari hati yang terletak di atas kasur.</div>
+    ${[
+      {key:'bed_eyebrow', label:'eyebrow atas surat', def:'To My Dearest Jose on Your 17th Birthday'},
+      {key:'bed_title', label:'judul surat', def:'To the Love of My Life'},
+      {key:'bed_p1', label:'paragraf 01', def:'Happy 17th Birthday, my love. If I could wrap up the entire sky and give it to you today, I would. But instead, I built this digital room to hold just a small glimpse of how deeply, endlessly, and tenderly you are loved.', long:true},
+      {key:'bed_p2', label:'paragraf 02', def:'Watching you grow, dream, and navigate life is one of the greatest privileges of my heart. You have a kindness that softens the hardest days and a smile that makes everything right in an instant.', long:true},
+      {key:'bed_p3', label:'paragraf 03', def:'At seventeen, you stand before so many open roads. Whatever paths you choose, whatever dreams you chase, remember that I will always be right here beside you, cheering for you, holding your hand, and loving you through it all.', long:true},
+      {key:'bed_p4', label:'paragraf 04', def:'May this seventeenth year bring you boundless happiness, peace, and fulfillment. Thank you for existing, thank you for loving me, and thank you for being the boy of my dreams.', long:true},
+      {key:'bed_sign', label:'salam penutup', def:'Forever and always yours with all my heart,'},
+    ].map(fieldRow).join('')}
+  </div>
+</section>`));
+
+// ---------- 11 secret drawer notes ----------
+root.appendChild(el(`
+<section class="exhibit">
+  <div class="exhibit-head">
+    <span class="exhibit-num">11</span>
+    <h2 class="exhibit-title">catatan rahasia di laci meja</h2>
+  </div>
+  <div class="exhibit-body">
+    <div class="note-block">🗄️ 3 amplop catatan rahasia di dalam laci meja belajar.</div>
+    ${[
+      {key:'drawer1', label:'note 01 (saat butuh semangat) → tag / judul / pesan', def:'Open When You Need Reassurance / You Are More Than Enough / Never doubt your strength, your intelligence, or your worth. You are extraordinary in every way, and I believe in you completely.', long:true},
+      {key:'drawer2', label:'note 02 (saat kangen) → tag / judul / pesan', def:'Open When You Miss Me / I Am Always With You / Close your eyes and feel the rhythm of your heart. In every beat, know that my love is right there holding you close.', long:true},
+      {key:'drawer3', label:'note 03 (kupon peluk / janji) → tag / judul / pesan', def:'A Lifetime Promise / Eternal Hug Coupon / Redeemable anytime, anywhere, for as long as you need. No expiration date, ever.', long:true},
+    ].map(fieldRow).join('')}
+  </div>
+</section>`));
+
+// ---------- 12 window skyline ----------
+root.appendChild(el(`
+<section class="exhibit">
+  <div class="exhibit-head">
+    <span class="exhibit-num">12</span>
+    <h2 class="exhibit-title">pesan jendela (skyline window)</h2>
+  </div>
+  <div class="exhibit-body">
+    <div class="note-block">🪟 pesan romantis yang muncul saat jendela pemandangan langit diklik.</div>
+    ${[
+      {key:'win_day', label:'pesan langit siang (daytime message)', def:'Under this bright sun, my heart thinks of you in every single passing second.', long:true},
+      {key:'win_night', label:'pesan langit malam (night sky message)', def:'Every star in this night sky is a reminder of a thousand reasons why I love you.', long:true},
+      {key:'win_sub', label:'subteks jendela', def:'No matter how vast the sky is, my entire universe will always be you.', long:true},
+    ].map(fieldRow).join('')}
+  </div>
+</section>`));
+
+// ---------- 13 songs needed ----------
+root.appendChild(el(`
+<section class="exhibit">
+  <div class="exhibit-head">
+    <span class="exhibit-num">13</span>
+    <h2 class="exhibit-title">songs needed (3 lagu mp3)</h2>
+  </div>
+  <div class="exhibit-body">
+    <div class="note-block">🎵 lampirkan <strong>3 file lagu .mp3</strong> langsung di chat telegram nanti. tuliskan nama judul & artis di bawah untuk pencocokan.</div>
+    ${[
+      {key:'track1', label:'track 01 (judul - artis)', def:'Sweet - Cigarettes After Sex'},
+      {key:'track2', label:'track 02 (judul - artis)', def:'Nothing - Bruno Major'},
+      {key:'track3', label:'track 03 (judul - artis)', def:'Best Part - Daniel Caesar ft. H.E.R.'},
+    ].map(fieldRow).join('')}
+  </div>
+</section>`));
+
+// ---------- 14 link & custom subdomain ----------
+root.appendChild(el(`
+<section class="exhibit">
+  <div class="exhibit-head">
+    <span class="exhibit-num">14</span>
+    <h2 class="exhibit-title">link & subdomain website</h2>
+    <p class="exhibit-note">2 opsi wajib diisi</p>
+  </div>
+  <div class="exhibit-body">
+    <div class="field">
+      <label>website title (judul tab browser)</label>
+      <input type="text" id="website_title" data-key="website_title" placeholder="Jose's Room">
+    </div>
+    <div class="field">
+      <label>custom link option 01 <span class="req">*</span></label>
+      <div class="link-suffix"><input type="text" id="link1" placeholder="jose17"><span>.netlify.app</span></div>
+    </div>
+    <div class="field">
+      <label>custom link option 02 <span class="req">*</span></label>
+      <div class="link-suffix"><input type="text" id="link2" placeholder="room17"><span>.netlify.app</span></div>
+    </div>
+    <p class="default-hint">note: nama link seperti boyroom.netlify.app bersifat unik di seluruh dunia, siapkan 2 opsi nama ya!</p>
+  </div>
+</section>`));
+
+// ---------- price calculation ----------
+function updatePrice(){
+  let total = 25000;
+  if(document.querySelector('input[name=recolor]:checked').value==='yes') total += 2000;
+  if(document.getElementById('rush').checked) total += 4000;
+  document.getElementById('priceOut').textContent = 'Rp' + total.toLocaleString('id-ID');
+}
+document.getElementById('rush').addEventListener('change', updatePrice);
+updatePrice();
+
+// ---------- validation ----------
+function validateForm(){
+  let firstInvalid = null;
+  const invalidEls = [];
+
+  document.querySelectorAll('.field input[type=text], .field input[type=date], .field textarea').forEach(el=>{
+    if(el.dataset.required === 'false') { el.classList.remove('invalid'); return; }
+    const empty = !el.value.trim();
+    el.classList.toggle('invalid', empty);
+    if(empty){ invalidEls.push(el); if(!firstInvalid) firstInvalid = el; }
+  });
+
+  document.querySelectorAll('.link-suffix').forEach(wrap=>{
+    const input = wrap.querySelector('input');
+    const empty = !input.value.trim();
+    wrap.classList.toggle('invalid', empty);
+    if(empty){ invalidEls.push(input); if(!firstInvalid) firstInvalid = input; }
+  });
+
+  return { valid: invalidEls.length === 0, firstInvalid, count: invalidEls.length };
+}
+
+document.addEventListener('input', (e)=>{
+  if(e.target.matches('.field input, .field textarea')) e.target.classList.remove('invalid');
+  if(e.target.closest('.link-suffix')) e.target.closest('.link-suffix').classList.remove('invalid');
+});
+
+// ---------- summary builder ----------
+function val(id, fallback){
+  const e = document.getElementById(id);
+  if(!e) return fallback||'';
+  const v = e.value.trim();
+  return v ? v : (fallback||'');
+}
+function fval(key, def){
+  const e = document.querySelector(`[data-key="${key}"]`);
+  const v = e ? e.value.trim() : '';
+  return v ? v : def;
+}
+
+function buildSummaryText(){
+  const recolor = document.querySelector('input[name=recolor]:checked').value;
+  const rush = document.getElementById('rush').checked;
+
+  let newPaletteLine = '';
+  if(recolor==='yes'){
+    const hexes = Array.from(document.querySelectorAll('#paletteInputs input[type=text]')).map(i=>i.value.trim().toUpperCase());
+    newPaletteLine = hexes.join(', ');
+  }
+
+  const lines = [];
+  lines.push('𓏲 boyroom form ♡');
+  lines.push('website price : ' + document.getElementById('priceOut').textContent);
+  lines.push('');
+  lines.push('𝟶𝟶 ୵ customer identity.');
+  lines.push('name : ' + val('cust_name'));
+  lines.push('username : ' + val('cust_username'));
+  lines.push('payment : qris no rate.');
+  lines.push('deadline : ' + val('deadline') + (rush ? ' (rush — within 24h before deadline, +4.000)' : ''));
+  lines.push('');
+  lines.push('𝟶𝟷 ୵ custom color palette.');
+  lines.push('recolor : ' + recolor);
+  lines.push('default palette : ' + DEFAULT_PALETTE.join(', '));
+  if(recolor==='yes') lines.push('new palette : ' + newPaletteLine);
+  lines.push('');
+  lines.push('𝟶𝟸 ୵ birthday & identity record.');
+  lines.push('boyfriend nickname → ' + fval('bf_name', 'Jose'));
+  lines.push('girlfriend nickname → ' + fval('gf_name', 'Esme'));
+  lines.push('birth date → ' + fval('birth_date', 'January 3, 2009'));
+  lines.push('turning age → ' + fval('age', '17'));
+  lines.push('celebration year → ' + fval('year_celebration', '2026'));
+  lines.push('relationship start year → ' + fval('relationship_year', '2024'));
+  lines.push('');
+  lines.push('𝟶𝟹 ୵ sticky note pintu masuk 3D.');
+  lines.push('door sticky note message → ' + fval('door_msg', 'Happy 17th Birthday, Jose. I built this virtual mini room holding all my love for you, tap the door handle to enter.'));
+  lines.push('door sign off → ' + fval('door_sign', 'By, Esme.'));
+  lines.push('');
+  lines.push('𝟶𝟺 ୵ laptop workstation (computer os).');
+  lines.push('• about profile:');
+  lines.push('  favorite feature → ' + fval('pc_feature', 'The gentle warmth in your eyes whenever you look at me'));
+  lines.push('  secret superpower → ' + fval('pc_superpower', 'Making all my heaviest days feel light just by holding my hand'));
+  lines.push('  favorite shared habit → ' + fval('pc_habit', 'Listening to our playlist under the late night sky with nowhere else to be'));
+  lines.push('• our archive:');
+  lines.push('  stat days together → ' + fval('stat_days', '730+') + ' (' + fval('stat_days_label', 'Days I have fallen deeper in love with you') + ')');
+  lines.push('  log 01 → ' + fval('log1', 'The First Glance / The moment my world quietly shifted and chose you.'));
+  lines.push('  log 02 → ' + fval('log2', 'Late Night Calls / Whispering about our dreams until the city fell asleep.'));
+  lines.push('  log 03 → ' + fval('log3', 'Every Quiet Walk / Realizing home is not a place, but anywhere I walk beside you.'));
+  lines.push('  log 04 → ' + fval('log4', 'Today at 17 / Promising to love you through every season still to come.'));
+  lines.push('• sweet 17 pass (VIP card):');
+  lines.push('  pass id number → ' + fval('card_id', '2009-0103-LOVE-17'));
+  lines.push('  card status → ' + fval('card_status', 'Permanently Cherished & Adored'));
+  lines.push('  perk 01 → ' + fval('card_perk1', 'Unlimited warm embraces whenever the world feels overwhelming'));
+  lines.push('  perk 02 → ' + fval('card_perk2', 'Lifelong priority access to all my softest thoughts and warmest kisses'));
+  lines.push('  perk 03 → ' + fval('card_perk3', 'A constant hand to hold through every adventure, milestone, and quiet moment'));
+  lines.push('  perk 04 → ' + fval('card_perk4', 'An eternal cheerleader who believes in your brightest future without question'));
+  lines.push('• love notes:');
+  lines.push('  note 01 → ' + fval('note1', 'You are the quiet peace in my noisy world, the gentle anchor I never knew I needed.'));
+  lines.push('  note 02 → ' + fval('note2', 'I love who you are today, who you were yesterday, and every version of you yet to unfold.'));
+  lines.push('  note 03 → ' + fval('note3', 'If I had to live this life a thousand times over, I would search for you in every single one.'));
+  lines.push('  note 04 → ' + fval('note4', 'Happy 17th Birthday, my love. Being yours is the greatest gift I have ever known.'));
+  lines.push('');
+  lines.push('𝟶𝟻 ୵ kue ulang tahun & tiup lilin (cake ceremony).');
+  lines.push('tag usia → ' + fval('cake_tag', '17'));
+  lines.push('judul kue → ' + fval('cake_title', 'Sweet 17 Birthday Wish'));
+  lines.push('pesan ajakan → ' + fval('cake_sub', 'Close your eyes, make the deepest wish in your heart, and blow out the candle.'));
+  lines.push('teks setelah lilin ditiup → ' + fval('cake_wish', 'Make a Wish & Blow the Candle'));
+  lines.push('');
+  lines.push('𝟶𝟼 ୵ chat simulasi iPhone 16 (iMessage).');
+  lines.push('chat 01 (12:00 AM) → ' + fval('msg1', 'Happy 17th Birthday, my handsome boy.'));
+  lines.push('chat 02 (12:01 AM) → ' + fval('msg2', 'I made this entire digital room just for you so you can feel how much you mean to me.'));
+  lines.push('chat 03 (12:02 AM) → ' + fval('msg3', 'Every song, every note, every corner here holds a piece of my heart for you.'));
+  lines.push('chat 04 (Just now) → ' + fval('msg4', 'Are you exploring your room right now?'));
+  lines.push('quick reply 01 → ' + fval('qr1', 'I love you so much, Esme. / I love you more than words could ever say, Jose.'));
+  lines.push('quick reply 02 → ' + fval('qr2', 'This is the most beautiful gift ever. / You deserve all the tenderness and beauty in this world.'));
+  lines.push('quick reply 03 → ' + fval('qr3', 'Come here and give me a hug. / On my way to wrap my arms around you forever.'));
+  lines.push('');
+  lines.push('𝟶𝟽 ୵ kamera digicam. (4 foto dilampirkan di chat)');
+  lines.push('photo 01 (caption / tag) → ' + fval('cam1_cap', 'The way you smile when you don\'t even realize I\'m looking at you.') + ' / ' + fval('cam1_loc', 'My Favorite Candid'));
+  lines.push('photo 02 (caption / tag) → ' + fval('cam2_cap', 'My favorite view across every table, in every place we go.') + ' / ' + fval('cam2_loc', 'Everyday Dates'));
+  lines.push('photo 03 (caption / tag) → ' + fval('cam3_cap', 'Lost in your thoughts, looking effortlessly handsome as always.') + ' / ' + fval('cam3_loc', 'Quiet Moments'));
+  lines.push('photo 04 (caption / tag) → ' + fval('cam4_cap', 'The boy who stole my entire heart, celebrating 17 today.') + ' / ' + fval('cam4_loc', 'Sweet 17'));
+  lines.push('');
+  lines.push('𝟶𝟾 ୵ polaroid dinding. (2 foto dilampirkan di chat)');
+  lines.push('polaroid 01 front → ' + fval('pol1_front', 'My favorite boy in the world.'));
+  lines.push('polaroid 01 back note → ' + fval('pol1_back', 'I love capturing candid moments of you because seeing you happy is my favorite thing on earth. Happy 17th, Jose.'));
+  lines.push('polaroid 02 front → ' + fval('pol2_front', 'My heart found its home in you.'));
+  lines.push('polaroid 02 back note → ' + fval('pol2_back', 'Thank you for being the most loving, handsome, and gentle boyfriend a girl could ever dream of.'));
+  lines.push('');
+  lines.push('𝟶𝟿 ୵ timeline perjalanan. (4 foto dilampirkan di chat)');
+  lines.push('• milestone 01:');
+  lines.push('  date : ' + fval('t1_date', 'January 3'));
+  lines.push('  tag : ' + fval('t1_tag', 'The Beginning'));
+  lines.push('  title : ' + fval('t1_title', 'The World Received You'));
+  lines.push('  preview : ' + fval('t1_prev', 'The day the boy who would one day hold my entire world was born.'));
+  lines.push('  full memory : ' + fval('t1_story', 'On January 3, 2009, you entered this world. Even before our paths ever crossed, the universe was already shaping the sweetest soul I would ever know.'));
+  lines.push('• milestone 02:');
+  lines.push('  date : ' + fval('t2_date', 'First Hello'));
+  lines.push('  tag : ' + fval('t2_tag', 'The Spark'));
+  lines.push('  title : ' + fval('t2_title', 'When Our Worlds Collided'));
+  lines.push('  preview : ' + fval('t2_prev', 'A simple introduction that turned into the most meaningful connection of my life.'));
+  lines.push('  full memory : ' + fval('t2_story', 'I remember looking at you for the first time, feeling that sudden flutter in my chest, and knowing you were someone truly special.'));
+  lines.push('• milestone 03:');
+  lines.push('  date : ' + fval('t3_date', 'Every Sunset'));
+  lines.push('  tag : ' + fval('t3_tag', 'Growing Closer'));
+  lines.push('  title : ' + fval('t3_title', 'Falling in Love with You Everyday'));
+  lines.push('  preview : ' + fval('t3_prev', 'Shared laughter, whispered secrets, and learning every nuance of your heart.'));
+  lines.push('  full memory : ' + fval('t3_story', 'Through every quiet evening and every smile you gave me, I fell completely in love with your kindness, your warmth, and the boy you are.'));
+  lines.push('• milestone 04:');
+  lines.push('  date : ' + fval('t4_date', 'January 3'));
+  lines.push('  tag : ' + fval('t4_tag', 'Sweet 17'));
+  lines.push('  title : ' + fval('t4_title', 'Seventeen and Deeply Loved'));
+  lines.push('  preview : ' + fval('t4_prev', 'Celebrating 17 years of your existence, with a promise of endless love ahead.'));
+  lines.push('  full memory : ' + fval('t4_story', 'Today you turn 17. Looking at you now, I see the handsome boy of my dreams, and I promise to love you through every chapter still to come.'));
+  lines.push('');
+  lines.push('𝟷𝟶 ୵ surat cinta kasur (bed letter).');
+  lines.push('eyebrow : ' + fval('bed_eyebrow', 'To My Dearest Jose on Your 17th Birthday'));
+  lines.push('letter title : ' + fval('bed_title', 'To the Love of My Life'));
+  lines.push('paragraph 01 : ' + fval('bed_p1', 'Happy 17th Birthday, my love. If I could wrap up the entire sky and give it to you today, I would. But instead, I built this digital room to hold just a small glimpse of how deeply, endlessly, and tenderly you are loved.'));
+  lines.push('paragraph 02 : ' + fval('bed_p2', 'Watching you grow, dream, and navigate life is one of the greatest privileges of my heart. You have a kindness that softens the hardest days and a smile that makes everything right in an instant.'));
+  lines.push('paragraph 03 : ' + fval('bed_p3', 'At seventeen, you stand before so many open roads. Whatever paths you choose, whatever dreams you chase, remember that I will always be right here beside you, cheering for you, holding your hand, and loving you through it all.'));
+  lines.push('paragraph 04 : ' + fval('bed_p4', 'May this seventeenth year bring you boundless happiness, peace, and fulfillment. Thank you for existing, thank you for loving me, and thank you for being the boy of my dreams.'));
+  lines.push('sign off : ' + fval('bed_sign', 'Forever and always yours with all my heart,'));
+  lines.push('');
+  lines.push('𝟷𝟷 ୵ catatan rahasia di laci meja.');
+  lines.push('note 01 (semangat) → ' + fval('drawer1', 'Open When You Need Reassurance / You Are More Than Enough / Never doubt your strength, your intelligence, or your worth. You are extraordinary in every way, and I believe in you completely.'));
+  lines.push('note 02 (kangen) → ' + fval('drawer2', 'Open When You Miss Me / I Am Always With You / Close your eyes and feel the rhythm of your heart. In every beat, know that my love is right there holding you close.'));
+  lines.push('note 03 (kupon) → ' + fval('drawer3', 'A Lifetime Promise / Eternal Hug Coupon / Redeemable anytime, anywhere, for as long as you need. No expiration date, ever.'));
+  lines.push('');
+  lines.push('𝟷𝟸 ୵ pesan jendela (skyline window).');
+  lines.push('day message : ' + fval('win_day', 'Under this bright sun, my heart thinks of you in every single passing second.'));
+  lines.push('night message : ' + fval('win_night', 'Every star in this night sky is a reminder of a thousand reasons why I love you.'));
+  lines.push('subtext : ' + fval('win_sub', 'No matter how vast the sky is, my entire universe will always be you.'));
+  lines.push('');
+  lines.push('𝟷𝟹 ୵ songs needed. (3 file .mp3 dilampirkan di chat)');
+  lines.push('track 01 : ' + val('track1', 'Sweet - Cigarettes After Sex'));
+  lines.push('track 02 : ' + val('track2', 'Nothing - Bruno Major'));
+  lines.push('track 03 : ' + val('track3', 'Best Part - Daniel Caesar ft. H.E.R.'));
+  lines.push('');
+  lines.push('𝟷𝟺 ୵ link.');
+  lines.push('website title : ' + fval('website_title', "Jose's Room"));
+  lines.push('link option 01 : ' + (val('link1') || 'jose17') + '.netlify.app');
+  lines.push('link option 02 : ' + (val('link2') || 'room17') + '.netlify.app');
+
+  return lines.join('\n');
+}
+
+const TELEGRAM_USERNAME = 'mirssy';
+function openPrefilledTelegram(text){
+  window.open(`https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+document.getElementById('generateBtn').addEventListener('click', async ()=>{
+  const outputCard = document.getElementById('outputCard');
+  const outputText = document.getElementById('outputText');
+  const status = document.getElementById('sendStatus');
+  const msg = document.getElementById('copiedMsg');
+  const formError = document.getElementById('formError');
+
+  const check = validateForm();
+  if(!check.valid){
+    formError.textContent = `masih ada ${check.count} kolom wajib yang belum diisi. lengkapi dulu ya ♡`;
+    formError.style.display = 'block';
+    check.firstInvalid.scrollIntoView({behavior:'smooth', block:'center'});
+    check.firstInvalid.focus({preventScroll:true});
+    return;
+  }
+  formError.style.display = 'none';
+
+  const text = buildSummaryText();
+  outputText.textContent = text;
+  outputCard.classList.add('show');
+  outputCard.scrollIntoView({behavior:'smooth', block:'start'});
+
+  try{ await navigator.clipboard.writeText(text); }catch(e){ /* clipboard fallback */ }
+
+  status.textContent = 'siap dikirim ✓';
+  msg.textContent = 'teks pesanan sudah tersalin ke clipboard ♡ chat telegram sudah dibuka — tinggal paste, lalu attach 10 foto (4 digicam, 2 polaroid, 4 timeline) & 3 file lagu .mp3 langsung di situ ya!';
+  msg.style.display = 'block';
+
+  openPrefilledTelegram(text);
+});
+
+document.getElementById('copyBtn').addEventListener('click', async ()=>{
+  try{
+    await navigator.clipboard.writeText(document.getElementById('outputText').textContent);
+    const msg = document.getElementById('copiedMsg');
+    msg.textContent = 'tersalin ke clipboard ♡';
+    msg.style.display = 'block';
+  }catch(e){
+    alert('gagal menyalin otomatis, silakan blok teks di atas lalu salin manual.');
+  }
+});
+</script>
+</body>
+</html>
